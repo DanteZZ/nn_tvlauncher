@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.0/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <button @click="openSettings">Открыть настройки</button>
+      <table>
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Path</th>
+          <th>Version</th>
+        </tr>
+        <tr v-for="app in appList" :key="app.pname" @click="runApp(app.pname)">
+          <td><img :src="`data:image/png;base64,${app.icon}`" alt="" /></td>
+          <td>{{app.appname}}</td>
+          <td>{{app.pname}}</td>
+          <td>{{app.versionName}}</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
+<script>
+  var app = new Vue({
+    el: "#app",
+    data: {
+      message: "Привет, Vue!",
+      appList: JSON.parse(_android_.installedApps()),
+    },
+    methods: {
+      runApp(name) {
+        _android_.runApplication(name);
+      },
+      openSettings() {
+        _android_.openSettings();
+      },
+    },
+  });
+</script>
