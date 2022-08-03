@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         webView.setWebChromeClient(new LauncherWebChromeClient());
         webView.setWebViewClient(new LauncherWebViewClient());
         webView.addJavascriptInterface(new JavaScriptInterface(this), "_android_");
-        webView.loadUrl("file:///android_asset/web/index.html");
+        webView.loadUrl(BuildConfig.WEB_URL);
     }
     private static class LauncherWebViewClient extends WebViewClient {
         @TargetApi(Build.VERSION_CODES.N)
@@ -120,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
             private String versionName = "";
             private int versionCode = 0;
             private String icon;
+            private Boolean hasBanner = false;
+            private String banner = "";
         }
 
         private ArrayList<PInfo> getInstalledApps(boolean getSysPackages) {
@@ -144,8 +146,12 @@ public class MainActivity extends AppCompatActivity {
                     newInfo.pname = p.packageName;
                     newInfo.versionName = p.versionName;
                     newInfo.versionCode = p.versionCode;
-
-                    newInfo.icon = ImageUtils.convert(p.applicationInfo.loadIcon(getPackageManager()));
+                    if (p.applicationInfo.banner != 0) {
+                        newInfo.hasBanner = true;
+                        newInfo.banner = ImageUtils.convert(p.applicationInfo.loadBanner(getPackageManager()));
+                    } else {
+                        newInfo.icon = ImageUtils.convert(p.applicationInfo.loadIcon(getPackageManager()));
+                    };
                     res.add(newInfo);
                 }
             }
