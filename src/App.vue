@@ -1,41 +1,71 @@
 <template>
   <div>
-    <button @click="openSettings" class="settings" @focus="showToast">
-      Открыть настройки
-    </button>
-    <div class="app-grid">
-      <button
-        v-for="app in appList"
-        :key="app.pname"
-        @click="runApp(app.pname)"
-        class="app-grid__item"
-        :class="{ 'app-grid__item--nobanner': !app.hasBanner }"
-      >
-        <img
-          :src="`data:image/png;base64,${
-            app.hasBanner ? app.banner : app.icon
-          }`"
-          alt=""
-          class="app-grid__item-image"
-        />
-        <div class="app-grid__item-name">{{ app.appname }}</div>
-      </button>
+    <div class="app">
+      <FloatNavigation />
+      <div class="app__container">
+        <h1>Список приложений</h1>
+        <ApplicationList v-if="appList">
+          <ApplicationItem v-for="app in appList" :key="app.pname" :app="app" />
+        </ApplicationList>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import exampleImage from "./assets/exampleapp.png";
+import ApplicationItem from "./components/ApplicationItem.vue";
+import ApplicationList from "./components/ApplicationList.vue";
+import FloatNavigation from "./components/FloatNavigation.vue";
 export default {
   name: "App",
+  components: { ApplicationItem, ApplicationList, FloatNavigation },
   data() {
     return {
       message: "Привет, Vue!",
-      appList: JSON.parse(this.$android.installedApps()),
+      appList: [
+        {
+          pname: "meme",
+          appname: "Yandex Music",
+          hasBanner: true,
+          banner: exampleImage,
+        },
+        {
+          pname: "meme2",
+          appname: "Yandex Music App",
+          hasBanner: false,
+          icon: exampleImage,
+        },
+        {
+          pname: "meme3",
+          appname: "Приложение",
+          hasBanner: true,
+          banner: exampleImage,
+        },
+        {
+          pname: "meme4",
+          appname: "Приложение",
+          hasBanner: true,
+          banner: exampleImage,
+        },
+        {
+          pname: "meme5",
+          appname: "Приложение",
+          hasBanner: true,
+          banner: exampleImage,
+        },
+        {
+          pname: "meme6",
+          appname: "Приложение",
+          hasBanner: true,
+          banner: exampleImage,
+        },
+      ], // JSON.parse(this.$android.installedApps()),
     };
   },
   methods: {
-    runApp(name) {
-      this.$android.runApplication(name);
+    clickApp(app) {
+      this.$android.runApplication(app.pname);
     },
     openSettings() {
       this.$android.openSettings();
@@ -48,66 +78,47 @@ export default {
 </script>
 
 <style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 html,
 body {
   background-color: #1d1f24;
+  font-family: "Inter", sans-serif;
+  background: linear-gradient(108.38deg, #435159 0%, #20292e 76.65%);
+  min-height: 100%;
+  min-width: 100%;
+  margin: 0px;
+  padding: 0px;
+  color: white;
 }
+* {
+  box-sizing: border-box;
+}
+body {
+  padding: 32px;
+  display: block;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0px 0px 32px 0px;
+  padding: 0px;
+}
+
 .app {
-  &-grid {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    width: 100%;
-    &__item {
-      max-width: 213px;
-      max-height: 120px;
-      width: 213px;
-      height: 120px;
-      position: relative;
-      border-radius: 8px;
-      margin: 1em;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border: 0px;
-      transition: 0.2s;
-      &:focus {
-        outline: 0;
-        box-shadow: rgba(47, 27, 162, 0.597) 0px 48px 100px 0px;
-        & .app-grid__item-name {
-          opacity: 1;
-          bottom: -1em;
-        }
-      }
-      &-image {
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        right: 0px;
-        bottom: 0px;
-        object-fit: cover;
-        border-radius: 8px;
-      }
-      &-name {
-        position: absolute;
-        bottom: 8px;
-        color: white;
-        font-weight: 800;
-        opacity: 0;
-        transition: 0.2s;
-      }
-      &--nobanner {
-        & .app-grid__item-image {
-          position: inherit;
-          border-radius: 4px;
-        }
-      }
-    }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &__container {
+    width: 1536px;
   }
 }
-.settings:focus {
-  color: red;
+
+@media all and (max-width: 1590px) {
+  .app {
+    &__container {
+      width: 1216px;
+    }
+  }
 }
 </style>
