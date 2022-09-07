@@ -30,8 +30,6 @@ export default {
     return {
       message: "Привет, Vue!",
       appList: [],
-      ratio: window.devicePixelRatio,
-      screenWidth: window.screen.width,
     };
   },
   computed: {

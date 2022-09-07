@@ -9,13 +9,14 @@
       ></div>
       <button
         v-for="item in items"
+        :ref="'item-' + item.id"
         :key="item.id"
         class="app__navigation-item"
         :class="{
           'app__navigation-item--selected': item.id === selectedItem,
           'app__navigation-item--focused': item.id === focusedItem,
         }"
-        @focus="(e) => focusItem(e, item.id)"
+        @focus="(e) => focusItem(e.target, item.id)"
         @blur="() => blurItem(item.id)"
         @click="() => selectItem(item)"
       >
@@ -41,9 +42,13 @@ export default {
       ],
     };
   },
+  mounted() {
+    console.log(this.$refs["item-" + this.focusedItem]);
+    this.focusItem(this.$refs["item-" + this.focusedItem][0], this.focusedItem);
+  },
   methods: {
     focusItem(e, id) {
-      this.focusLeft = e.target.offsetLeft || 0;
+      this.focusLeft = e.offsetLeft || 0;
       this.focusedItem = id;
       this.isFocus = true;
     },

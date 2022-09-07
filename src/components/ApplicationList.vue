@@ -6,12 +6,6 @@
 <script>
 export default {
   name: "application-list",
-  props: {
-    app: {
-      type: Object,
-      required: true,
-    },
-  },
 };
 </script>
 <style lang="scss">
