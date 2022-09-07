@@ -11,18 +11,17 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         debug {
-            buildConfigField("String", "WEB_URL", "\"http://10.0.2.2:8080\"")
+            buildConfigField 'String', 'WEB_URL', '\"http://10.0.2.2:8080\"'
         }
         release {
+            buildConfigField 'String', 'WEB_URL', '\"file:///android_asset/web/index.html\"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "WEB_URL", "\"file:///android_asset/web/index.html\"")
         }
     }
     compileOptions {

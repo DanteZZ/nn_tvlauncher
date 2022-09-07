@@ -10,6 +10,7 @@ import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
@@ -18,6 +19,7 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -26,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,11 +36,14 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE))
             { WebView.setWebContentsDebuggingEnabled(true); }
-        }
+        };
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebChromeClient(new LauncherWebChromeClient());
         webView.setWebViewClient(new LauncherWebViewClient());
         webView.addJavascriptInterface(new JavaScriptInterface(this), "_android_");
+
         webView.loadUrl(BuildConfig.WEB_URL);
     }
     private static class LauncherWebViewClient extends WebViewClient {
@@ -90,6 +94,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @JavascriptInterface
+        public void updateLoader(boolean state) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    RelativeLayout loaderBox = (RelativeLayout)findViewById(R.id.relativeLoader);
+                    if (state) {
+                        loaderBox.setVisibility(View.VISIBLE);
+                    } else {
+                        loaderBox.setVisibility(View.INVISIBLE);
+                    }
+                }
+            });
+        }
+
+        @JavascriptInterface
         public void showToast(String toast) {
             Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
         }
@@ -131,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 PackageInfo p = packs.get(i);
                 Boolean add = false;
                 if ((!getSysPackages) && (p.versionName == null)) {
-                    continue ;
+                    add = true;
                 }
                 if ((p.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
                     if (getSysPackages) {

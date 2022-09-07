@@ -1,11 +1,12 @@
 <template>
   <button
+    v-if="app"
     @click="$emit('click-app')"
     class="app__item"
     :class="{ 'app__item--nobanner': !app.hasBanner }"
   >
     <img
-      :src="`${app.hasBanner ? app.banner : app.icon}`"
+      :src="`data:image/png;base64,${app.hasBanner ? app.banner : app.icon}`"
       alt=""
       class="app__item-image"
     />
@@ -17,7 +18,7 @@ export default {
   name: "application-item",
   props: {
     app: {
-      type: Object,
+      type: [Object, Number, Boolean],
       required: true,
     },
   },
@@ -26,8 +27,11 @@ export default {
 <style lang="scss">
 .app {
   &__item {
-    min-height: 160px;
-    max-height: 160px;
+    min-height: 156px;
+    height: 156px;
+    min-width: 280px;
+    width: 280px;
+    margin: 0em 16px 32px 16px;
     position: relative;
     border-radius: 8px;
     display: flex;
@@ -36,13 +40,14 @@ export default {
     justify-content: center;
     border: 0px;
     transition: 0.2s;
+
     &:focus,
     &:hover {
       cursor: pointer;
       outline: 0;
-      box-shadow: rgba(27, 81, 162, 0.37) 0px 48px 100px 0px;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 48px 100px 0px;
       z-index: 10;
-      margin-top: -8px;
+      transform: scale(1.1);
     }
     &-image {
       position: absolute;
@@ -68,6 +73,7 @@ export default {
           right: auto;
           bottom: auto;
           margin-right: 1.5em;
+          object-fit: contain;
         }
         &-name {
           position: relative;
@@ -79,5 +85,8 @@ export default {
       }
     }
   }
+}
+
+@media screen and (max-width: 962px) {
 }
 </style>

@@ -1,19 +1,25 @@
 <template>
   <div>
     <div class="app">
-      <FloatNavigation />
-      <div class="app__container">
-        <h1>Список приложений</h1>
-        <ApplicationList v-if="appList">
-          <ApplicationItem v-for="app in appList" :key="app.pname" :app="app" />
-        </ApplicationList>
+      <div class="app__wrapper">
+        <FloatNavigation />
+        <div class="app__container">
+          <h1>Список приложений</h1>
+          <ApplicationList v-if="appList">
+            <ApplicationItem
+              v-for="app in appList"
+              :key="app.pname"
+              :app="app"
+              @click-app="() => clickApp(app)"
+            />
+          </ApplicationList>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import exampleImage from "./assets/exampleapp.png";
 import ApplicationItem from "./components/ApplicationItem.vue";
 import ApplicationList from "./components/ApplicationList.vue";
 import FloatNavigation from "./components/FloatNavigation.vue";
@@ -23,45 +29,15 @@ export default {
   data() {
     return {
       message: "Привет, Vue!",
-      appList: [
-        {
-          pname: "meme",
-          appname: "Yandex Music",
-          hasBanner: true,
-          banner: exampleImage,
-        },
-        {
-          pname: "meme2",
-          appname: "Yandex Music App",
-          hasBanner: false,
-          icon: exampleImage,
-        },
-        {
-          pname: "meme3",
-          appname: "Приложение",
-          hasBanner: true,
-          banner: exampleImage,
-        },
-        {
-          pname: "meme4",
-          appname: "Приложение",
-          hasBanner: true,
-          banner: exampleImage,
-        },
-        {
-          pname: "meme5",
-          appname: "Приложение",
-          hasBanner: true,
-          banner: exampleImage,
-        },
-        {
-          pname: "meme6",
-          appname: "Приложение",
-          hasBanner: true,
-          banner: exampleImage,
-        },
-      ], // JSON.parse(this.$android.installedApps()),
+      appList: [],
+      ratio: window.devicePixelRatio,
+      screenWidth: window.screen.width,
     };
+  },
+  computed: {
+    dpiData() {
+      return this.$dpi;
+    },
   },
   methods: {
     clickApp(app) {
@@ -74,6 +50,11 @@ export default {
       this.$android.showToast("Focused");
     },
   },
+  created() {
+    this.appList = JSON.parse(this.$android.installedApps());
+    console.log("Hehehe");
+    this.$android.updateLoader(false);
+  },
 };
 </script>
 
@@ -81,11 +62,9 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 html,
 body {
-  background-color: #1d1f24;
   font-family: "Inter", sans-serif;
-  background: linear-gradient(108.38deg, #435159 0%, #20292e 76.65%);
-  min-height: 100%;
-  min-width: 100%;
+  height: 100%;
+  width: 100%;
   margin: 0px;
   padding: 0px;
   color: white;
@@ -93,8 +72,10 @@ body {
 * {
   box-sizing: border-box;
 }
+html {
+  background: linear-gradient(108.38deg, #435159 0%, #20292e 76.65%);
+}
 body {
-  padding: 32px;
   display: block;
 }
 
@@ -107,18 +88,22 @@ h1 {
 
 .app {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  &__container {
-    width: 1536px;
+  position: relative;
+  padding-top: 112px;
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
   }
-}
-
-@media all and (max-width: 1590px) {
-  .app {
-    &__container {
-      width: 1216px;
-    }
+  &__container {
+    min-width: 1216px;
+    width: 1216px;
+    position: relative;
+  }
+  &__list {
+    width: calc(100% + 32px);
   }
 }
 </style>
