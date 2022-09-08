@@ -17,6 +17,7 @@
           'app__navigation-item--focused': item.id === focusedItem,
         }"
         @focus="(e) => focusItem(e.target, item.id)"
+        @mousemove="(e) => focusItem(e.target, item.id)"
         @blur="() => blurItem(item.id)"
         @click="() => selectItem(item)"
       >
@@ -26,24 +27,20 @@
   </div>
 </template>
 <script>
+import screens, { defaultScreen } from "@/config/screens";
+
 export default {
   name: "float-navigation",
   data() {
     return {
       isFocus: true,
       focusLeft: 0,
-      focusedItem: "apps",
-      selectedItem: "apps",
-      items: [
-        { id: "apps", name: "Приложения" },
-        { id: "tv", name: "Каналы" },
-        { id: "store", name: "Магазин" },
-        { id: "settings", name: "Настройки" },
-      ],
+      focusedItem: defaultScreen,
+      selectedItem: defaultScreen,
+      items: screens,
     };
   },
   mounted() {
-    console.log(this.$refs["item-" + this.focusedItem]);
     this.focusItem(this.$refs["item-" + this.focusedItem][0], this.focusedItem);
   },
   methods: {
@@ -53,8 +50,12 @@ export default {
       this.isFocus = true;
     },
     selectItem(item) {
-      this.selectedItem = item.id;
-      this.$emit("select", item);
+      if (!item?.action) {
+        this.selectedItem = item.id;
+        this.$emit("change", item.id);
+      } else {
+        this.$emit("action", item.id);
+      }
     },
     blurItem(id) {
       setTimeout(() => {

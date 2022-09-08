@@ -1,19 +1,23 @@
 import Vue from "vue";
 import App from "./App.vue";
+import VideoPlayer from "vue-vjs-hls";
+
+import android from "@/config/android";
+import updateDpi from "./config/dpi";
+
+updateDpi();
 
 Vue.config.productionTip = false;
-Vue.prototype.$android = window._android_;
+Vue.prototype.$android = android;
 Vue.prototype.$dpi = window.Detector;
-const minWidth = 1280;
-if (window.screen.width < minWidth && window.Detector.devicePixelRatio > 1) {
-  const scale = window.screen.width / minWidth;
-  document
-    .querySelector("meta[name=viewport]")
-    .setAttribute(
-      "content",
-      `width=device-width, initial-scale=${scale}, maximum-scale=${scale}, user-scalable=0`
-    );
-}
+
+VideoPlayer.config({
+  youtube: false,
+  switcher: true,
+  hls: true,
+});
+
+Vue.use(VideoPlayer);
 
 new Vue({
   render: (h) => h(App),

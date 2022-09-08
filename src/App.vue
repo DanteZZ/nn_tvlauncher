@@ -2,17 +2,9 @@
   <div>
     <div class="app">
       <div class="app__wrapper">
-        <FloatNavigation />
+        <FloatNavigation @change="onNavChange" @action="onNavAction" />
         <div class="app__container">
-          <h1>Список приложений</h1>
-          <ApplicationList v-if="appList">
-            <ApplicationItem
-              v-for="app in appList"
-              :key="app.pname"
-              :app="app"
-              @click-app="() => clickApp(app)"
-            />
-          </ApplicationList>
+          <Applications v-if="screen === SCR_APPS" :items="appList" />
         </div>
       </div>
     </div>
@@ -20,16 +12,28 @@
 </template>
 
 <script>
-import ApplicationItem from "./components/ApplicationItem.vue";
-import ApplicationList from "./components/ApplicationList.vue";
+import Applications from "./components/screens/Applications.vue";
 import FloatNavigation from "./components/FloatNavigation.vue";
+import {
+  SCR_APPS,
+  SCR_SETTINGS,
+  SCR_STORE,
+  SCR_TV,
+  defaultScreen,
+} from "./config/screens";
+import { runAction } from "@/plugins/actions";
+
 export default {
   name: "App",
-  components: { ApplicationItem, ApplicationList, FloatNavigation },
+  components: { Applications, FloatNavigation },
   data() {
     return {
-      message: "Привет, Vue!",
       appList: [],
+      SCR_APPS,
+      SCR_SETTINGS,
+      SCR_STORE,
+      SCR_TV,
+      screen: defaultScreen,
     };
   },
   computed: {
@@ -38,19 +42,16 @@ export default {
     },
   },
   methods: {
-    clickApp(app) {
-      this.$android.runApplication(app.pname);
+    runAction,
+    onNavChange(id) {
+      this.screen = id;
     },
-    openSettings() {
-      this.$android.openSettings();
-    },
-    showToast() {
-      this.$android.showToast("Focused");
+    onNavAction(id) {
+      this.runAction(id);
     },
   },
   created() {
     this.appList = JSON.parse(this.$android.installedApps());
-    console.log("Hehehe");
     this.$android.updateLoader(false);
   },
 };
