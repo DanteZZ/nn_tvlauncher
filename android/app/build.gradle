@@ -5,13 +5,58 @@ plugins {
 android {
     compileSdk 32
 
-    defaultConfig {
-        applicationId "com.nn.tvlauncher"
-        minSdk 21
-        targetSdk 32
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    def versionPropsFile = file('version.properties')
+    if (versionPropsFile.canRead()) {
+        def Properties versionProps = new Properties()
+
+        versionProps.load(new FileInputStream(versionPropsFile))
+
+        def value = 0
+
+        def runTasks = gradle.startParameter.taskNames
+        if ('assemble' in runTasks || 'assembleRelease' in runTasks || 'aR' in runTasks) {
+            value = 1;
+        }
+
+        def versionMajor = 1
+        def versionMinor = 0
+        def versionPatch = versionProps['VERSION_PATCH'].toInteger() + value
+        def versionBuild = versionProps['VERSION_BUILD'].toInteger() + 1
+        def versionNumber = versionProps['VERSION_NUMBER'].toInteger() + value
+
+        versionProps['VERSION_PATCH'] = versionPatch.toString()
+        versionProps['VERSION_BUILD'] = versionBuild.toString()
+        versionProps['VERSION_NUMBER'] = versionNumber.toString()
+
+        versionProps.store(versionPropsFile.newWriter(), null)
+
+        defaultConfig {
+            applicationId "com.nn.tvlauncher"
+            minSdk 21
+            targetSdk 32
+            versionCode "${versionMajor}${versionMinor}${versionPatch}${versionBuild}" as Integer
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}:${versionBuild}-release"
+            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        }
+
+        applicationVariants.all { variant ->
+            def fileNaming = "nn.tvlauncher"
+            variant.outputs.all {
+                outputFileName = "${fileNaming}-${versionMajor}.${versionMinor}.${versionPatch}-b${versionBuild}-${outputFile.name}"
+            }
+        }
+
+    } else {
+        throw new GradleException("Could not read version.properties!")
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('/home/dantezz/Desktop/Projects/nn_tvlauncher/android/releaseKey.jks')
+            storePassword 'Atar1-2600'
+            keyAlias 'nn'
+            keyPassword 'Atar1-2600'
+        }
     }
 
     buildTypes {
@@ -22,6 +67,7 @@ android {
             buildConfigField 'String', 'WEB_URL', '\"file:///android_asset/web/index.html\"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
