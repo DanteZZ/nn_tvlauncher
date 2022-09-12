@@ -5,6 +5,7 @@
         <FloatNavigation @change="onNavChange" @action="onNavAction" />
         <div class="app__container">
           <Applications v-if="screen === SCR_APPS" :items="appList" />
+          <Channels v-if="screen === SCR_TV" />
         </div>
       </div>
     </div>
@@ -22,10 +23,11 @@ import {
   defaultScreen,
 } from "./config/screens";
 import { runAction } from "@/plugins/actions";
+import Channels from "./components/screens/Channels.vue";
 
 export default {
   name: "App",
-  components: { Applications, FloatNavigation },
+  components: { Applications, FloatNavigation, Channels },
   data() {
     return {
       appList: [],

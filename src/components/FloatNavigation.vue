@@ -50,7 +50,7 @@ export default {
       this.isFocus = true;
     },
     selectItem(item) {
-      if (!item?.action) {
+      if (!item.action) {
         this.selectedItem = item.id;
         this.$emit("change", item.id);
       } else {
