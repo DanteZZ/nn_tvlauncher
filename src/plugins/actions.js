@@ -4,6 +4,12 @@ const actions = {
   settings: () => {
     android.openSettings();
   },
+  store: () => {
+    android.runApplication("org.eltex.AppStore");
+  },
+  tv: () => {
+    android.runApplication("org.eltex.android.app.iptvplayer");
+  },
 };
 
 export const runAction = (id) => {
