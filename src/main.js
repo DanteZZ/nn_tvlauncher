@@ -3,8 +3,7 @@ import App from "./App.vue";
 import VideoPlayer from "vue-vjs-hls";
 
 import android from "@/config/android";
-import updateDpi from "./config/dpi";
-
+import updateDpi from "@/config/dpi";
 updateDpi();
 
 Vue.config.productionTip = false;

@@ -8,6 +8,10 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.graphics.Point;
+import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -93,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
     }
     public class JavaScriptInterface {
         Context mContext;
-
         JavaScriptInterface(Context c) {
             mContext = c;
         }
