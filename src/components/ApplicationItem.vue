@@ -47,7 +47,7 @@ export default {
       outline: 0;
       box-shadow: rgba(0, 0, 0, 0.1) 0px 48px 100px 0px;
       z-index: 10;
-      transform: scale(1.1);
+      transform: scale(1.2);
     }
     &-image {
       position: absolute;
@@ -85,8 +85,5 @@ export default {
       }
     }
   }
-}
-
-@media screen and (max-width: 962px) {
 }
 </style>

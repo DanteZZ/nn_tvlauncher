@@ -2,9 +2,13 @@
   <div>
     <div class="app">
       <div class="app__wrapper">
-        <FloatNavigation @change="onNavChange" @action="onNavAction" />
+        <FloatNavigation
+          @change="onNavChange"
+          @action="onNavAction"
+          :time="timestamp"
+        />
         <div class="app__container">
-          <Applications v-if="screen === SCR_APPS" :items="appList" />
+          <Applications v-if="screen === SCR_APPS" :items="applications" />
           <Channels v-if="screen === SCR_TV" />
         </div>
       </div>
@@ -37,11 +41,16 @@ export default {
       SCR_TV,
       screen: defaultScreen,
       screenSize: null,
+      packageName: null,
+      timestamp: "",
     };
   },
   computed: {
     dpiData() {
       return this.$dpi;
+    },
+    applications() {
+      return this.appList.filter((i) => i.pname !== this.packageName);
     },
   },
   methods: {
@@ -52,11 +61,26 @@ export default {
     onNavAction(id) {
       this.runAction(id);
     },
+    updateAppList() {
+      this.appList = this.$android.installedApps();
+    },
+    updateCurrentTime() {
+      const today = new Date();
+      const hour = this.pad(today.getHours());
+      const minute = this.pad(today.getMinutes());
+      this.timestamp = hour + ":" + minute;
+    },
+    pad(d) {
+      return d < 10 ? "0" + d.toString() : d.toString();
+    },
   },
-  created() {
-    this.appList = this.$android.installedApps();
+  mounted() {
     this.screenSize = this.$android.screenSize();
+    this.packageName = this.$android.packageName();
     this.$android.updateLoader(false);
+    this.updateAppList();
+    setInterval(this.updateAppList, 8000);
+    setInterval(this.updateCurrentTime, 500);
   },
 };
 </script>
@@ -76,10 +100,14 @@ body {
   box-sizing: border-box;
 }
 html {
-  background: linear-gradient(108.38deg, #435159 0%, #20292e 76.65%);
+  background: linear-gradient(108.38deg, #819fb1 0%, #506c7a 76.65%);
+  background-image: url("https://wallpaperaccess.com/full/882671.jpg");
+  background-size: cover;
+  background-position: center;
 }
 body {
   display: block;
+  background: rgba(15, 15, 15, 0.7);
 }
 
 h1 {
@@ -104,6 +132,7 @@ h1 {
     min-width: 1216px;
     width: 1216px;
     position: relative;
+    margin-top: 3em;
   }
   &__list {
     width: calc(100% + 32px);
@@ -117,6 +146,9 @@ h1 {
       width: 1528px;
       position: relative;
     }
+  }
+  h1 {
+    font-size: 28px;
   }
 }
 </style>

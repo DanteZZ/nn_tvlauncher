@@ -7,6 +7,7 @@ if (window._android_) {
     showToast: (text) => window._android_.showToast(text),
     openSettings: () => window._android_.openSettings(),
     runApplication: (name) => window._android_.runApplication(name),
+    packageName: () => window._android_.packageName(),
   };
 } else {
   androidFunctions = {
@@ -28,6 +29,7 @@ if (window._android_) {
     showToast: (text) => alert(text),
     openSettings: () => console.log("Opened settings"),
     runApplication: (name) => console.log(`Run application: ${name}`),
+    packageName: () => null,
   };
 }
 

@@ -11,6 +11,7 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
         webView.loadUrl(BuildConfig.WEB_URL);
     }
+    @Override
+    public void onBackPressed() {}
     private static class LauncherWebViewClient extends WebViewClient {
         @TargetApi(Build.VERSION_CODES.N)
         @Override
@@ -143,6 +146,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
         }
 
+        @JavascriptInterface
+        public String packageName() {
+            return BuildConfig.APPLICATION_ID;
+        }
+
         class PInfo {
             private String appname = "";
             private String pname = "";
@@ -168,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else {
                     add = true;
-                }
+                };
                 if (add) {
                     PInfo newInfo = new PInfo();
                     newInfo.appname = p.applicationInfo.loadLabel(getPackageManager()).toString();

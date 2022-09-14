@@ -1,6 +1,9 @@
 <template>
   <div class="app__navigation">
-    <div class="app__navigation-offset"></div>
+    <div class="app__navigation-offset">
+      <div class="app__navigation-logo"><img :src="logo" /></div>
+      <div class="app__navigation-time">{{ time }}</div>
+    </div>
     <div class="app__navigation-menu">
       <div
         v-show="isFocus"
@@ -28,9 +31,12 @@
 </template>
 <script>
 import screens, { defaultScreen } from "@/config/screens";
-
+import logo from "@/assets/logo.svg";
 export default {
   name: "float-navigation",
+  props: {
+    time: { type: [String, Number, Boolean], default: null },
+  },
   data() {
     return {
       isFocus: false,
@@ -38,9 +44,9 @@ export default {
       focusedItem: null,
       selectedItem: defaultScreen,
       items: screens,
+      logo,
     };
   },
-  mounted() {},
   methods: {
     focusItem(e, id) {
       this.focusLeft = e.offsetLeft || 0;
@@ -68,22 +74,32 @@ export default {
 </script>
 <style lang="scss">
 .app__navigation {
-  position: relative;
+  position: fixed;
   display: flex;
   align-items: center;
-  position: absolute;
+  justify-content: center;
   width: 100%;
-  top: 32px;
+  top: 0px;
+  padding-top: 32px;
+
   &-offset {
-    width: 100%;
+    width: 1216px;
     height: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &-time {
+    font-size: 32px;
+    font-weight: 300;
   }
   &-menu {
     position: absolute;
-    top: 0px;
+    top: calc(50% + 16px);
     position: absolute;
     left: 50%;
-    transform: translate(-50%, 0%);
+    transform: translate(-50%, -50%);
     margin: auto;
     background: rgba(0, 0, 0, 0.4);
     border-radius: 40px;
@@ -121,13 +137,22 @@ export default {
 
 @media screen and (min-width: 1592px) {
   .app__navigation {
+    &-logo {
+      & > img {
+        height: 38px;
+      }
+    }
+    &-offset {
+      width: 1528px;
+      height: 80px;
+    }
     &-item {
-      font-size: 22px;
+      font-size: 24px;
       padding: 12px;
-      width: 194px;
+      width: 216px;
       &--select {
         height: 58px;
-        width: 194px;
+        width: 216px;
       }
     }
   }
