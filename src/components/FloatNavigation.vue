@@ -33,16 +33,14 @@ export default {
   name: "float-navigation",
   data() {
     return {
-      isFocus: true,
+      isFocus: false,
       focusLeft: 0,
-      focusedItem: defaultScreen,
+      focusedItem: null,
       selectedItem: defaultScreen,
       items: screens,
     };
   },
-  mounted() {
-    this.focusItem(this.$refs["item-" + this.focusedItem][0], this.focusedItem);
-  },
+  mounted() {},
   methods: {
     focusItem(e, id) {
       this.focusLeft = e.offsetLeft || 0;
@@ -117,6 +115,20 @@ export default {
       width: 182px;
       border-radius: 30px;
       transition: 0.2s;
+    }
+  }
+}
+
+@media screen and (min-width: 1592px) {
+  .app__navigation {
+    &-item {
+      font-size: 22px;
+      padding: 12px;
+      width: 194px;
+      &--select {
+        height: 58px;
+        width: 194px;
+      }
     }
   }
 }

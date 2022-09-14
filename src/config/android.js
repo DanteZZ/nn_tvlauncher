@@ -1,6 +1,16 @@
-const androidEmulator = {
-  installedApps: () =>
-    JSON.stringify([
+let androidFunctions = {};
+if (window._android_) {
+  androidFunctions = {
+    installedApps: () => JSON.parse(window._android_.installedApps()),
+    screenSize: () => JSON.parse(window._android_.screenSize()),
+    updateLoader: (state) => window._android_.updateLoader(state),
+    showToast: (text) => window._android_.showToast(text),
+    openSettings: () => window._android_.openSettings(),
+    runApplication: (name) => window._android_.runApplication(name),
+  };
+} else {
+  androidFunctions = {
+    installedApps: () => [
       {
         hasBanner: false,
         banner: null,
@@ -8,13 +18,17 @@ const androidEmulator = {
         appname: "Приложение",
         pname: "com.some.app",
       },
-    ]),
-  updateLoader: (state) => {
-    console.log(`Loader is ${state ? "show" : "hide"}`);
-  },
-  showToast: (text) => alert(text),
-  openSettings: () => console.log("Opened settings"),
-  runApplication: (name) => console.log(`Run application: ${name}`),
-};
+    ],
+    screenSize: () => {
+      return { x: window.innerWidth, y: window.innerHeight };
+    },
+    updateLoader: (state) => {
+      console.log(`Loader is ${state ? "show" : "hide"}`);
+    },
+    showToast: (text) => alert(text),
+    openSettings: () => console.log("Opened settings"),
+    runApplication: (name) => console.log(`Run application: ${name}`),
+  };
+}
 
-export default window._android_ || androidEmulator;
+export default androidFunctions;

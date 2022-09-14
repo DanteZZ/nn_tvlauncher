@@ -1,15 +1,20 @@
+import android from "@/config/android";
+
+const { x } = android.screenSize();
+
 const minWidth = 1280;
+const maxWidth = 1592;
+
+const needWidth = x < 1280 ? minWidth : x > maxWidth ? maxWidth : x;
 
 const updateDpi = () => {
-  if (window.screen.width < minWidth && window.Detector.devicePixelRatio > 1) {
-    const scale = window.screen.width / minWidth;
-    document
-      .querySelector("meta[name=viewport]")
-      .setAttribute(
-        "content",
-        `width=device-width, initial-scale=${scale}, maximum-scale=${scale}, user-scalable=0`
-      );
-  }
+  const scale = window.screen.width / needWidth;
+  document
+    .querySelector("meta[name=viewport]")
+    .setAttribute(
+      "content",
+      `width=device-width, initial-scale=${scale}, maximum-scale=${scale}, user-scalable=0`
+    );
 };
 
 export default updateDpi;

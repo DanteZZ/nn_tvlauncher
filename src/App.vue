@@ -36,6 +36,7 @@ export default {
       SCR_STORE,
       SCR_TV,
       screen: defaultScreen,
+      screenSize: null,
     };
   },
   computed: {
@@ -53,7 +54,8 @@ export default {
     },
   },
   created() {
-    this.appList = JSON.parse(this.$android.installedApps());
+    this.appList = this.$android.installedApps();
+    this.screenSize = this.$android.screenSize();
     this.$android.updateLoader(false);
   },
 };
@@ -105,6 +107,16 @@ h1 {
   }
   &__list {
     width: calc(100% + 32px);
+  }
+}
+
+@media screen and (min-width: 1592px) {
+  .app {
+    &__container {
+      min-width: 1528px;
+      width: 1528px;
+      position: relative;
+    }
   }
 }
 </style>

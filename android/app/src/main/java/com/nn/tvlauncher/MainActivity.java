@@ -7,9 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.Display;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsPromptResult;
@@ -117,6 +119,14 @@ public class MainActivity extends AppCompatActivity {
         public String installedApps(){
             ArrayList<JavaScriptInterface.PInfo> apps = getInstalledApps(false); /* false = no system packages */
             return new Gson().toJson(apps);
+        }
+
+        @JavascriptInterface
+        public String screenSize() {
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            return new Gson().toJson(size);
         }
 
         @JavascriptInterface
