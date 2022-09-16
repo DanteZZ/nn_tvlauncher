@@ -75,7 +75,6 @@ export default {
     },
   },
   mounted() {
-    this.screenSize = this.$android.screenSize();
     this.packageName = this.$android.packageName();
     this.$android.updateLoader(false);
     this.updateAppList();

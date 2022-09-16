@@ -2,10 +2,10 @@ import android from "@/config/android";
 
 const { x } = android.screenSize();
 
-const minWidth = 1280;
+const minWidth = 1592;
 const maxWidth = 1680;
 
-const needWidth = x < 1280 ? minWidth : x > maxWidth ? maxWidth : x;
+const needWidth = x < minWidth ? minWidth : x > maxWidth ? maxWidth : x;
 
 const updateDpi = () => {
   const scale = window.screen.width / needWidth;
