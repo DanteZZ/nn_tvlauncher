@@ -2,7 +2,7 @@ import android from "@/config/android";
 
 const { x } = android.screenSize();
 
-const minWidth = 1592;
+const minWidth = 1280;
 const maxWidth = 1680;
 
 const needWidth = x < minWidth ? minWidth : x > maxWidth ? maxWidth : x;
